@@ -47,10 +47,10 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0}
 .btn-action{border:0;border-radius:999px;padding:14px 34px;color:#fff;font-size:16px;cursor:pointer;background:linear-gradient(135deg,#e85ca8,#916ce9);box-shadow:0 10px 30px #d45ca855;transition:.2s}
 .btn-action:hover{transform:translateY(-2px) scale(1.03)}
 
-/* 主界面 */
+/* 主界面卡片 */
 .wrap{height:100%;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:2;opacity:0;transform:scale(0.96);transition:all .8s ease}
 .wrap.show{opacity:1;transform:scale(1)}
-.card{width:min(900px,94vw);height:min(680px,88vh);border:1px solid #ffffff2b;border-radius:32px;background:#ffffff12;backdrop-filter:blur(18px);box-shadow:0 30px 100px #0008;display:flex;align-items:center;justify-content:center;text-align:center;padding:35px;position:relative;overflow:hidden}
+.card{width:min(900px,94vw);height:min(660px,84vh);border:1px solid #ffffff2b;border-radius:32px;background:#ffffff12;backdrop-filter:blur(18px);box-shadow:0 30px 100px #0008;display:flex;align-items:center;justify-content:center;text-align:center;padding:35px;position:relative;overflow:hidden}
 .page{display:none;width:100%;animation:in .7s ease}.page.active{display:block}
 @keyframes in{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 .kicker{font-size:13px;letter-spacing:6px;color:#ffd0ea;margin-bottom:18px}
@@ -63,8 +63,82 @@ h1{font-size:clamp(42px,8vw,80px);line-height:1.05;margin:0 0 20px;background:li
 .msg{font-size:clamp(19px,3vw,29px);line-height:2;margin:0 auto 28px}.msg span{color:#ffd0e9}
 .small{color:#ddd0e0;line-height:2;font-size:15px}
 .gift{font-size:82px;cursor:pointer;display:inline-block;animation:f 2s ease-in-out infinite}@keyframes f{50%{transform:translateY(-12px) rotate(2deg)}}
-.hint{font-size:12px;color:#ffffff80;margin-top:17px}.foot{position:absolute;bottom:15px;left:0;right:0;color:#ffffff66;font-size:11px;letter-spacing:2px}
-#music{position:fixed;right:18px;top:18px;z-index:30;width:44px;height:44px;border-radius:50%;border:1px solid #ffffff30;background:#ffffff15;color:white;cursor:pointer;font-size:18px}
+.hint{font-size:12px;color:#ffffff80;margin-top:17px}
+
+/* 登机牌样式 */
+.ticket{
+  position:relative;width:min(580px,92%);margin:0 auto 25px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));
+  border:1px dashed rgba(255,210,235,0.5);border-radius:18px;padding:22px 26px;
+  text-align:left;box-shadow:inset 0 0 25px rgba(255,255,255,0.05);overflow:hidden;
+}
+.ticket-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.15);padding-bottom:12px;margin-bottom:15px}
+.ticket-logo{font-size:13px;letter-spacing:3px;color:#ffd0ea;font-weight:bold}
+.ticket-no{font-size:11px;color:#ffffff88;letter-spacing:1px}
+.ticket-row{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px}
+.ticket-label{color:#ffffff77;font-size:12px;display:block;margin-bottom:3px}
+.ticket-val{color:#fff;font-weight:500;font-size:15px}
+.ticket-val.hl{color:#ffd0ea}
+.ticket-foot{border-top:1px dashed rgba(255,255,255,0.2);padding-top:12px;margin-top:14px;display:flex;justify-content:space-between;align-items:center}
+.barcode{font-family:monospace;letter-spacing:4px;color:#ffffff66;font-size:13px}
+.stamp{
+  position:absolute;right:35px;bottom:25px;width:92px;height:92px;
+  border:2.5px solid #ff7caa;border-radius:50%;color:#ff7caa;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;
+  transform:rotate(-18deg) scale(2);opacity:0;pointer-events:none;
+  box-shadow:0 0 20px #ff7caa66, inset 0 0 10px #ff7caa44;
+  transition:all .45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.stamp.active{opacity:0.95;transform:rotate(-15deg) scale(1)}
+.stamp-title{font-size:12px;letter-spacing:2px;font-weight:bold}
+.stamp-sub{font-size:9px;letter-spacing:1px;margin-top:2px}
+
+/* 新增：终章时光胶囊与心愿签 */
+.capsule-box{
+  width:min(520px,90%);margin:0 auto 20px;padding:24px 20px;
+  background:radial-gradient(circle at 50% 20%, rgba(255,208,234,0.18), rgba(255,255,255,0.04));
+  border:1px solid rgba(255,255,255,0.25);border-radius:24px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);position:relative;
+}
+.capsule-icon{
+  font-size:54px;display:inline-block;cursor:pointer;
+  filter:drop-shadow(0 0 15px rgba(255,160,210,0.6));
+  transition:transform .3s ease;
+}
+.capsule-icon:hover{transform:scale(1.1) rotate(6deg)}
+.capsule-icon.shaking{animation:shake .5s ease}
+@keyframes shake{
+  0%,100%{transform:rotate(0)}
+  25%{transform:rotate(-12deg) scale(1.1)}
+  75%{transform:rotate(12deg) scale(1.1)}
+}
+.wish-card{
+  min-height:48px;display:flex;align-items:center;justify-content:center;
+  margin-top:14px;padding:12px 18px;border-radius:14px;
+  background:rgba(255,255,255,0.1);color:#ffd8ee;font-size:16px;letter-spacing:1.5px;
+  border:1px solid rgba(255,208,234,0.3);box-shadow:0 4px 20px rgba(0,0,0,0.2);
+  transition:all .4s ease;
+}
+.btn-group{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* 屏幕最下方固定底部文字 */
+.global-foot{
+  position:fixed;bottom:16px;left:0;right:0;z-index:10;
+  text-align:center;color:rgba(255,255,255,0.45);
+  font-size:12px;letter-spacing:3px;pointer-events:none;
+}
+
+/* 旋转音乐按钮 */
+#music{
+  position:fixed;right:18px;top:18px;z-index:30;
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid #ffffff30;background:#ffffff15;
+  color:white;cursor:pointer;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+}
+#music.playing{animation:spin 4s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
 .conf{position:fixed;z-index:15;width:7px;height:13px;pointer-events:none;animation:fall 2.7s linear forwards}
 @keyframes fall{to{transform:translate3d(var(--x),110vh,0) rotate(720deg);opacity:0}}
 </style>
@@ -73,7 +147,6 @@ h1{font-size:clamp(42px,8vw,80px);line-height:1.05;margin:0 0 20px;background:li
 <canvas id="stars"></canvas><div class="bg a"></div><div class="bg b"></div>
 <button id="music" title="背景音乐开关">♫</button>
 
-<!-- 真实音频标签预加载 -->
 <audio id="audioHbd" src="hbd.mp3" preload="auto" loop></audio>
 <audio id="audioBgm" src="bgm.mp3" preload="auto" loop></audio>
 
@@ -96,6 +169,7 @@ h1{font-size:clamp(42px,8vw,80px);line-height:1.05;margin:0 0 20px;background:li
 <!-- 第二阶段：祝福卡片 -->
 <div class="wrap" id="mainWrap"><div class="card">
 
+<!-- Page 1: 封面 -->
 <section class="page active" id="p1">
 <div class="kicker">A SPECIAL DAY FOR YOU</div>
 <h1>Dear久久<br>生日快乐 🎂</h1>
@@ -104,12 +178,46 @@ h1{font-size:clamp(42px,8vw,80px);line-height:1.05;margin:0 0 20px;background:li
 <div class="hint"></div>
 </section>
 
+<!-- Page 2: 温暖祝愿 -->
 <section class="page" id="p2">
 <div class="heart">💗</div><div class="kicker">TO · DEAR 久久</div>
 <p class="msg">愿你在23岁这一年，<br><span>有被认真爱着的幸运，</span><br>有想做就去做的勇气，<br>也有每一个普通日子里的小小惊喜。</p>
-<button class="btn" onclick="go(3)">还有一份礼物 🎁</button>
+<button class="btn" onclick="go('Ticket')">查收你的23岁登机牌 🎫</button>
 </section>
 
+<!-- Page Ticket: 专属时光漫游票 -->
+<section class="page" id="pTicket">
+<div class="kicker">BOARDING PASS TO 23RD</div>
+<div class="ticket">
+  <div class="stamp" id="stampMark">
+    <div class="stamp-title">APPROVED</div>
+    <div class="stamp-sub">23·久久限定</div>
+  </div>
+  <div class="ticket-head">
+    <span class="ticket-logo">✈ 23RD SPECIAL AIRWAYS</span>
+    <span class="ticket-no">NO. JJ-2003-2026</span>
+  </div>
+  <div class="ticket-row">
+    <div><span class="ticket-label">乘客 (PASSENGER)</span><span class="ticket-val hl">Dear 久久</span></div>
+    <div><span class="ticket-label">舱位 (CLASS)</span><span class="ticket-val">头等被偏爱舱 ★★★★★</span></div>
+  </div>
+  <div class="ticket-row">
+    <div><span class="ticket-label">始发地 (FROM)</span><span class="ticket-val">美好的 22 岁</span></div>
+    <div><span class="ticket-label">目的地 (DESTINATION)</span><span class="ticket-val hl">一路繁花的 23 岁 ✨</span></div>
+  </div>
+  <div class="ticket-row">
+    <div><span class="ticket-label">托运行李 (BAGGAGE)</span><span class="ticket-val">无限好运、自由、健康与快乐</span></div>
+    <div><span class="ticket-label">超额行李</span><span class="ticket-val">烦恼已清零卸下 ✕</span></div>
+  </div>
+  <div class="ticket-foot">
+    <span class="barcode">||| | |||| || ||| |||| |</span>
+    <span style="font-size:12px;color:#ffd0ea">GATE: FOREVER YOUNG</span>
+  </div>
+</div>
+<button class="btn" id="stampBtn" onclick="stampTicket()">戳印盖章开启旅程 🔖</button>
+</section>
+
+<!-- Page 3: 惊喜礼物 -->
 <section class="page" id="p3">
 <div class="kicker">ONE LITTLE SURPRISE</div>
 <div class="gift" onclick="openGift()">🎁</div>
@@ -117,18 +225,38 @@ h1{font-size:clamp(42px,8vw,80px);line-height:1.05;margin:0 0 20px;background:li
 <div class="hint">轻轻点一下就好 ♡</div>
 </section>
 
+<!-- Page 4: 烟花祝福语 -->
 <section class="page" id="p4">
 <div class="heart">✨</div><div class="kicker">FOR YOUR 23RD</div>
 <p class="msg">愿你的23岁，<br><span>一路有花、有光、有欢喜。</span></p>
 <p class="small">不必每一天都闪闪发光。<br>偶尔慢一点、累一点，也没关系。<br>希望你永远保留喜欢世界的能力，<br>也永远记得——你值得所有温柔的事。</p>
-<button class="btn" onclick="fireworks()">再放一次烟花 🎆</button>
-<div class="foot">HAPPY BIRTHDAY · DEAR 久久 · 23</div>
+<div class="btn-group">
+  <button class="btn" onclick="fireworks()">再放一次烟花 🎆</button>
+  <button class="btn" onclick="go(5)">开启时光胶囊 🔮</button>
+</div>
+</section>
+
+<!-- 新增 Page 5: 压轴时光胶囊与点亮恒星 -->
+<section class="page" id="p5">
+<div class="kicker">23RD TIME CAPSULE · 久久限定</div>
+<div class="capsule-box">
+  <div class="capsule-icon" id="capsuleIcon" onclick="drawWish()" title="点击摇一摇抽愿望">💊</div>
+  <p class="sub" style="margin:8px 0 0;font-size:14px;color:#ffffff99">轻触时光胶囊，抽取属于你的23岁上上签</p>
+  <div class="wish-card" id="wishText">✨ 点击上方胶囊，封存今天的愿望 ✨</div>
+</div>
+<div class="btn-group">
+  <button class="btn" onclick="drawWish()">再抽一张心愿签 🎐</button>
+  <button class="btn" onclick="lightUpStar()">点亮一颗久久星 🌟</button>
+</div>
 </section>
 
 </div></div>
 
+<!-- 页面正最下方固定常驻 -->
+<div class="global-foot">HAPPY BIRTHDAY · DEAR 久久 · 23</div>
+
 <script>
-// 1. 星空动画
+// 1. 星空动画（支持动态生成恒星）
 const c=document.getElementById("stars"),x=c.getContext("2d");let W,H,s=[];
 function size(){W=innerWidth;H=innerHeight;c.width=W*devicePixelRatio;c.height=H*devicePixelRatio;c.style.width=W+"px";c.style.height=H+"px";x.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
 function stars(){s=Array.from({length:Math.min(180,Math.floor(W/6))},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.2,a:Math.random(),d:Math.random()*.01+.002}))}
@@ -138,8 +266,63 @@ size();stars();draw();onresize=()=>{size();stars()};
 // 2. 交互动效
 function confetti(){let e=document.createElement("i");e.className="conf";e.style.left=Math.random()*100+"vw";e.style.top="-20px";e.style.background=["#ff8fc7","#ffd1ea","#caa7ff","#fff1a8","#fff"][Math.floor(Math.random()*5)];e.style.setProperty("--x",(Math.random()*240-120)+"px");e.style.transform="rotate("+Math.random()*360+"deg)";document.body.appendChild(e);setTimeout(()=>e.remove(),2800)}
 function fireworks(n=80){for(let i=0;i<n;i++)setTimeout(confetti,i*18)}
-function go(n){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("p"+n).classList.add("active");if(n==2)fireworks(20)}
+
+function go(pageId){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const target = (typeof pageId === 'number') ? document.getElementById("p"+pageId) : document.getElementById("p"+pageId);
+  if(target) target.classList.add("active");
+  if(pageId === 2 || pageId === 'Ticket' || pageId === 5) fireworks(25);
+}
+
+// 登机牌戳印
+let stamped = false;
+function stampTicket(){
+  if(!stamped){
+    stamped = true;
+    document.getElementById("stampMark").classList.add("active");
+    fireworks(35);
+    const btn = document.getElementById("stampBtn");
+    btn.textContent = "已生效 · 去拆礼物 🎁";
+    setTimeout(()=>{ btn.onclick = ()=> go(3); }, 400);
+  } else {
+    go(3);
+  }
+}
+
 function openGift(){go(4);fireworks(80)}
+
+// 时光胶囊：抽取心愿签
+const wishes = [
+  "💌 签语：新的一岁，所求皆如愿，所行皆坦途。",
+  "🌟 签语：去见想见的人，做想做的事，全世界都会偏爱你。",
+  "🍀 签语：好运正在打包派送中，平安、喜乐、万事顺意！",
+  "🌸 签语：保持热烈，也享受平淡，你永远是最值得被爱的久久。",
+  "✨ 签语：烦恼彻底清零，财富与自由翻倍，岁岁常欢愉！"
+];
+let wishIndex = 0;
+function drawWish(){
+  const icon = document.getElementById("capsuleIcon");
+  icon.classList.add("shaking");
+  setTimeout(()=> icon.classList.remove("shaking"), 500);
+  
+  wishIndex = (wishIndex + 1) % wishes.length;
+  const wishBox = document.getElementById("wishText");
+  wishBox.style.opacity = 0;
+  setTimeout(()=>{
+    wishBox.textContent = wishes[wishIndex];
+    wishBox.style.opacity = 1;
+  }, 200);
+  fireworks(30);
+}
+
+// 点亮恒星
+function lightUpStar(){
+  fireworks(100);
+  // 在画布中注入一颗永久闪烁的超亮金色“久久星”
+  s.push({x: W * 0.5, y: H * 0.22, r: 4.5, a: 1, d: 0.005});
+  const wishBox = document.getElementById("wishText");
+  wishBox.innerHTML = "🌟 <b>一颗属于久久的专属星辰已点亮在夜空</b> 🌟";
+}
 
 // 3. 双音频控制
 const audioHbd = document.getElementById("audioHbd");
@@ -150,18 +333,41 @@ audioBgm.volume = 0.75;
 let isMainBgmPlaying = false;
 const mBtn = document.getElementById("music");
 
+function setMusicPlayingState(playing){
+  if(playing){
+    mBtn.classList.add("playing");
+    mBtn.textContent = "♫";
+  }else{
+    mBtn.classList.remove("playing");
+    mBtn.textContent = "♪";
+  }
+}
+
 mBtn.onclick = (e)=>{
   e.stopPropagation();
-  if(step < 2) return;
-  if(isMainBgmPlaying){
-    audioBgm.pause(); isMainBgmPlaying = false; mBtn.textContent = "♪";
-  } else {
-    audioBgm.play().then(()=>{ isMainBgmPlaying = true; mBtn.textContent = "♫"; });
+  if(step === 1){
+    if(audioHbd.paused){
+      audioHbd.play().then(()=> setMusicPlayingState(true)).catch(e=>console.log(e));
+    }else{
+      audioHbd.pause();
+      setMusicPlayingState(false);
+    }
+  } else if(step >= 2){
+    if(isMainBgmPlaying){
+      audioBgm.pause();
+      isMainBgmPlaying = false;
+      setMusicPlayingState(false);
+    } else {
+      audioBgm.play().then(()=>{
+        isMainBgmPlaying = true;
+        setMusicPlayingState(true);
+      });
+    }
   }
 };
 
 // 4. 流程推进控制
-let step = 0; // 0: 待点亮, 1: 正在放八音盒, 2: 已吹灭切换到BGM
+let step = 0;
 function handleStageAction(){
   if(step === 0){
     step = 1;
@@ -170,25 +376,25 @@ function handleStageAction(){
     document.getElementById("stageTip").textContent = "点击吹灭蜡烛";
     document.getElementById("actionBtn").textContent = "吹灭蜡烛 💨";
     
-    // 播放真实八音盒音频
-    audioHbd.play().catch(e => console.log("等待交互播放:", e));
+    audioHbd.play().then(()=>{
+      setMusicPlayingState(true);
+    }).catch(e => console.log("等待交互播放:", e));
 
   } else if(step === 1){
     step = 2;
     document.getElementById("flame").classList.remove("lit");
     document.getElementById("flame").classList.add("off");
     
-    // 停止八音盒
     audioHbd.pause();
+    setMusicPlayingState(false);
     fireworks(50);
 
-    // 平滑转场到祝福页面并启动《遇见》BGM
     setTimeout(()=>{
       document.getElementById("stage").classList.add("hide");
       document.getElementById("mainWrap").classList.add("show");
       audioBgm.play().then(()=>{
         isMainBgmPlaying = true;
-        mBtn.textContent = "♫";
+        setMusicPlayingState(true);
       }).catch(e => console.log("BGM播放被拦截:", e));
     }, 1000);
   }
