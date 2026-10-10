@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dear久久生日快乐</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#090817;color:#fff}
+canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.bg{position:fixed;border-radius:50%;filter:blur(80px);opacity:.35;z-index:1}
+.a{width:320px;height:320px;background:#e56ab0;left:-90px;top:8%}.b{width:360px;height:360px;background:#8068e8;right:-120px;bottom:0}
+
+/* 序幕层：蛋糕与蜡烛 */
+#stage{
+  position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#090817;transition:opacity .9s ease, visibility .9s ease;padding:20px;text-align:center;
+}
+#stage.hide{opacity:0;visibility:hidden;pointer-events:none}
+.cake-area{position:relative;width:240px;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;margin-bottom:24px}
+.candle{position:relative;width:16px;height:55px;background:repeating-linear-gradient(45deg,#fff,#fff 6px,#ff7caa 6px,#ff7caa 12px);border-radius:6px;box-shadow:0 0 10px #ff7caa88;z-index:2}
+.flame{
+  position:absolute;top:-28px;left:50%;transform:translateX(-50%) scale(0);
+  width:16px;height:26px;background:linear-gradient(to bottom, #ffffc8, #ff8c2b 75%, #ff4520);
+  border-radius:50% 50% 35% 35%;box-shadow:0 0 18px #ffb24d, 0 0 35px #ff6f24;
+  transition:all .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.flame.lit{
+  transform:translateX(-50%) scale(1);
+  animation:flicker 1.2s infinite alternate ease-in-out;
+}
+@keyframes flicker{
+  0%{transform:translateX(-50%) rotate(-3deg) scale(1)}
+  100%{transform:translateX(-50%) rotate(3deg) scale(1.08, 0.95)}
+}
+.flame.off{opacity:0;transform:translateX(-50%) translateY(-20px) scale(0.1);box-shadow:none}
+
+.cake{position:relative;width:200px;display:flex;flex-direction:column;align-items:center}
+.c-top{width:140px;height:46px;background:#ffeef7;border-radius:14px 14px 6px 6px;position:relative;box-shadow:inset 0 -6px #ffcce6}
+.c-top::after{content:"🍓 🍒 🍓";position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:16px;letter-spacing:10px}
+.c-bot{width:186px;height:56px;background:#ffddeec4;border-radius:8px 8px 16px 16px;position:relative;box-shadow:inset 0 -8px #fcaecc,0 12px 30px #0008}
+.c-bot::before{content:"";position:absolute;top:0;left:0;right:0;height:12px;background:repeating-linear-gradient(90deg,#ff8fbe,#ff8fbe 14px,#ffddeec4 14px,#ffddeec4 28px);border-radius:4px}
+.plate{width:220px;height:10px;background:#ffffff33;border-radius:10px;margin-top:2px}
+
+.stage-title{font-size:24px;letter-spacing:2px;margin:15px 0 8px;color:#ffd1ea}
+.stage-tip{font-size:14px;color:#ffffff99;margin-bottom:22px}
+.btn-action{border:0;border-radius:999px;padding:14px 34px;color:#fff;font-size:16px;cursor:pointer;background:linear-gradient(135deg,#e85ca8,#916ce9);box-shadow:0 10px 30px #d45ca855;transition:.2s}
+.btn-action:hover{transform:translateY(-2px) scale(1.03)}
+
+/* 主界面 */
+.wrap{height:100%;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:2;opacity:0;transform:scale(0.96);transition:all .8s ease}
+.wrap.show{opacity:1;transform:scale(1)}
+.card{width:min(900px,94vw);height:min(680px,88vh);border:1px solid #ffffff2b;border-radius:32px;background:#ffffff12;backdrop-filter:blur(18px);box-shadow:0 30px 100px #0008;display:flex;align-items:center;justify-content:center;text-align:center;padding:35px;position:relative;overflow:hidden}
+.page{display:none;width:100%;animation:in .7s ease}.page.active{display:block}
+@keyframes in{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.kicker{font-size:13px;letter-spacing:6px;color:#ffd0ea;margin-bottom:18px}
+h1{font-size:clamp(42px,8vw,80px);line-height:1.05;margin:0 0 20px;background:linear-gradient(90deg,#fff,#ffd0ea,#d5baff,#fff);background-size:250%;-webkit-background-clip:text;color:transparent;animation:g 4s linear infinite}
+@keyframes g{to{background-position:250%}}
+.sub{font-size:clamp(16px,2.5vw,23px);line-height:1.9;color:#f8edf7;margin:0 auto 30px;max-width:680px}
+.btn{border:0;border-radius:999px;padding:14px 30px;color:#fff;font-size:16px;cursor:pointer;background:linear-gradient(135deg,#e85ca8,#916ce9);box-shadow:0 10px 35px #d45ca855;transition:.2s}
+.btn:hover{transform:translateY(-3px) scale(1.02)}
+.heart{font-size:46px;animation:p 1.5s infinite}@keyframes p{50%{transform:scale(1.15)}}
+.msg{font-size:clamp(19px,3vw,29px);line-height:2;margin:0 auto 28px}.msg span{color:#ffd0e9}
+.small{color:#ddd0e0;line-height:2;font-size:15px}
+.gift{font-size:82px;cursor:pointer;display:inline-block;animation:f 2s ease-in-out infinite}@keyframes f{50%{transform:translateY(-12px) rotate(2deg)}}
+.hint{font-size:12px;color:#ffffff80;margin-top:17px}.foot{position:absolute;bottom:15px;left:0;right:0;color:#ffffff66;font-size:11px;letter-spacing:2px}
+#music{position:fixed;right:18px;top:18px;z-index:30;width:44px;height:44px;border-radius:50%;border:1px solid #ffffff30;background:#ffffff15;color:white;cursor:pointer;font-size:18px}
+.conf{position:fixed;z-index:15;width:7px;height:13px;pointer-events:none;animation:fall 2.7s linear forwards}
+@keyframes fall{to{transform:translate3d(var(--x),110vh,0) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas><div class="bg a"></div><div class="bg b"></div>
+<button id="music" title="背景音乐开关">♫</button>
+
+<!-- 真实音频标签预加载 -->
+<audio id="audioHbd" src="hbd.mp3" preload="auto" loop></audio>
+<audio id="audioBgm" src="bgm.mp3" preload="auto" loop></audio>
+
+<!-- 第一阶段：点亮蛋糕与吹蜡烛 -->
+<div id="stage">
+  <div class="cake-area">
+    <div class="flame" id="flame"></div>
+    <div class="candle"></div>
+    <div class="cake">
+      <div class="c-top"></div>
+      <div class="c-bot"></div>
+      <div class="plate"></div>
+    </div>
+  </div>
+  <div class="stage-title" id="stageTitle">点亮生日蜡烛 ✨</div>
+  <div class="stage-tip" id="stageTip"> </div>
+  <button class="btn-action" id="actionBtn" onclick="handleStageAction()">点亮蛋糕 🕯️</button>
+</div>
+
+<!-- 第二阶段：祝福卡片 -->
+<div class="wrap" id="mainWrap"><div class="card">
+
+<section class="page active" id="p1">
+<div class="kicker">A SPECIAL DAY FOR YOU</div>
+<h1>Dear久久<br>生日快乐 🎂</h1>
+<p class="sub">今天的星星，比平时更亮一点。<br>因为属于你的23岁，正式开始了。</p>
+<button class="btn" onclick="go(2)">打开这份生日祝福 ✨</button>
+<div class="hint"></div>
+</section>
+
+<section class="page" id="p2">
+<div class="heart">💗</div><div class="kicker">TO · DEAR 久久</div>
+<p class="msg">愿你在23岁这一年，<br><span>有被认真爱着的幸运，</span><br>有想做就去做的勇气，<br>也有每一个普通日子里的小小惊喜。</p>
+<button class="btn" onclick="go(3)">还有一份礼物 🎁</button>
+</section>
+
+<section class="page" id="p3">
+<div class="kicker">ONE LITTLE SURPRISE</div>
+<div class="gift" onclick="openGift()">🎁</div>
+<p class="sub">点击礼物，看看里面藏着什么。</p>
+<div class="hint">轻轻点一下就好 ♡</div>
+</section>
+
+<section class="page" id="p4">
+<div class="heart">✨</div><div class="kicker">FOR YOUR 23RD</div>
+<p class="msg">愿你的23岁，<br><span>一路有花、有光、有欢喜。</span></p>
+<p class="small">不必每一天都闪闪发光。<br>偶尔慢一点、累一点，也没关系。<br>希望你永远保留喜欢世界的能力，<br>也永远记得——你值得所有温柔的事。</p>
+<button class="btn" onclick="fireworks()">再放一次烟花 🎆</button>
+<div class="foot">HAPPY BIRTHDAY · DEAR 久久 · 23</div>
+</section>
+
+</div></div>
+
+<script>
+// 1. 星空动画
+const c=document.getElementById("stars"),x=c.getContext("2d");let W,H,s=[];
+function size(){W=innerWidth;H=innerHeight;c.width=W*devicePixelRatio;c.height=H*devicePixelRatio;c.style.width=W+"px";c.style.height=H+"px";x.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+function stars(){s=Array.from({length:Math.min(180,Math.floor(W/6))},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.2,a:Math.random(),d:Math.random()*.01+.002}))}
+function draw(){x.clearRect(0,0,W,H);s.forEach(q=>{q.a+=q.d;if(q.a>1||q.a<0)q.d*=-1;x.globalAlpha=.2+.6*Math.abs(Math.sin(q.a*Math.PI));x.fillStyle="#fff";x.beginPath();x.arc(q.x,q.y,q.r,0,7);x.fill()});requestAnimationFrame(draw)}
+size();stars();draw();onresize=()=>{size();stars()};
+
+// 2. 交互动效
+function confetti(){let e=document.createElement("i");e.className="conf";e.style.left=Math.random()*100+"vw";e.style.top="-20px";e.style.background=["#ff8fc7","#ffd1ea","#caa7ff","#fff1a8","#fff"][Math.floor(Math.random()*5)];e.style.setProperty("--x",(Math.random()*240-120)+"px");e.style.transform="rotate("+Math.random()*360+"deg)";document.body.appendChild(e);setTimeout(()=>e.remove(),2800)}
+function fireworks(n=80){for(let i=0;i<n;i++)setTimeout(confetti,i*18)}
+function go(n){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("p"+n).classList.add("active");if(n==2)fireworks(20)}
+function openGift(){go(4);fireworks(80)}
+
+// 3. 双音频控制
+const audioHbd = document.getElementById("audioHbd");
+const audioBgm = document.getElementById("audioBgm");
+audioHbd.volume = 0.8;
+audioBgm.volume = 0.75;
+
+let isMainBgmPlaying = false;
+const mBtn = document.getElementById("music");
+
+mBtn.onclick = (e)=>{
+  e.stopPropagation();
+  if(step < 2) return;
+  if(isMainBgmPlaying){
+    audioBgm.pause(); isMainBgmPlaying = false; mBtn.textContent = "♪";
+  } else {
+    audioBgm.play().then(()=>{ isMainBgmPlaying = true; mBtn.textContent = "♫"; });
+  }
+};
+
+// 4. 流程推进控制
+let step = 0; // 0: 待点亮, 1: 正在放八音盒, 2: 已吹灭切换到BGM
+function handleStageAction(){
+  if(step === 0){
+    step = 1;
+    document.getElementById("flame").classList.add("lit");
+    document.getElementById("stageTitle").textContent = "🎂 许个愿望，吹灭蜡烛吧";
+    document.getElementById("stageTip").textContent = "点击吹灭蜡烛";
+    document.getElementById("actionBtn").textContent = "吹灭蜡烛 💨";
+    
+    // 播放真实八音盒音频
+    audioHbd.play().catch(e => console.log("等待交互播放:", e));
+
+  } else if(step === 1){
+    step = 2;
+    document.getElementById("flame").classList.remove("lit");
+    document.getElementById("flame").classList.add("off");
+    
+    // 停止八音盒
+    audioHbd.pause();
+    fireworks(50);
+
+    // 平滑转场到祝福页面并启动《遇见》BGM
+    setTimeout(()=>{
+      document.getElementById("stage").classList.add("hide");
+      document.getElementById("mainWrap").classList.add("show");
+      audioBgm.play().then(()=>{
+        isMainBgmPlaying = true;
+        mBtn.textContent = "♫";
+      }).catch(e => console.log("BGM播放被拦截:", e));
+    }, 1000);
+  }
+}
+</script>
+</body>
+</html>
+```[cite: 1]
